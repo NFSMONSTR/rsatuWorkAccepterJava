@@ -2,7 +2,6 @@ package ru.rsatu.rwa.pojo.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -28,7 +27,7 @@ public class Work {
     private Long markup;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User author;
     private Long semestr;

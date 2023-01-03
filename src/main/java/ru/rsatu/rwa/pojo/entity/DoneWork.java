@@ -22,7 +22,7 @@ public class DoneWork {
     @SequenceGenerator(name = "done_works_id_gen", sequenceName = "done_works_id_gen_seq", initialValue = 1, allocationSize = 10)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User author;
 
