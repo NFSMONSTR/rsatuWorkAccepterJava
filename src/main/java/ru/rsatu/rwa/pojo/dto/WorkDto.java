@@ -11,6 +11,7 @@ public class WorkDto {
     private Long id;
     private String name;
     private String short_description;
+    private String description;
     private String subject;
     private Long markup;
     private Long author;

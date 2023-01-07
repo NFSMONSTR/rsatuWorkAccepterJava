@@ -1,0 +1,1 @@
+insert into users (id, first_name, second_name, third_name, username, password, year, role, group_id) values (1, 'admin', 'admin', 'admin', 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 0, 'ADMIN', NULL);

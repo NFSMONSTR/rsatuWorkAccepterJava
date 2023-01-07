@@ -23,8 +23,8 @@ public abstract class UserMapper {
     @Mapping(target = "third_name", source = "third_name")
     @Mapping(target = "username", source = "username")
     @Mapping(target = "year", source = "year")
-    @Mapping(target = "permission_level", source = "permission_level")
-    @Mapping(target = "group", source = "group.id")
+    //@Mapping(target = "role", source = "role")
+    //@Mapping(target = "group", source = "group.id")
     public abstract UserDto toUserDto(User user);
 
     @Mapping(target = "id", source = "id")
@@ -34,13 +34,14 @@ public abstract class UserMapper {
     @Mapping(target = "username", source = "username")
     @Mapping(target = "password", source = "password")
     @Mapping(target = "year", source = "year")
-    @Mapping(target = "permission_level", source = "permission_level")
+    @Mapping(target = "role", source = "role")
     public abstract User toUser(UserDto userDto);
 
-    @AfterMapping
-    public void afterUserMapping(@MappingTarget User result, UserDto userDto) {
-        Group group = entityManager.getReference(Group.class, userDto.getGroup());
-        result.setGroup(group);
-    }
+
+//    @AfterMapping
+//    public void afterUserMapping(@MappingTarget User result, UserDto userDto) {
+//        Group group = entityManager.getReference(Group.class, userDto.getGroup());
+//        result.setGroup(group);
+//    }
 
 }

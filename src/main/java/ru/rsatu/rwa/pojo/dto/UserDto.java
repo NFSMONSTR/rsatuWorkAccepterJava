@@ -1,5 +1,6 @@
 package ru.rsatu.rwa.pojo.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,9 +11,14 @@ public class UserDto {
     private String first_name;
     private String second_name;
     private String third_name;
-    private String user_name;
+    private String username;
     private String password;
     private Long year;
-    private Long permission_level;
-    private Long group;
+    private RoleDto role;
+    private GroupDto group;
+
+    @JsonIgnore
+    public String getPassword() {
+        return password;
+    }
 }
