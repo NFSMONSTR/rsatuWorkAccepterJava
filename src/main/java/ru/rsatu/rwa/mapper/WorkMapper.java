@@ -45,33 +45,37 @@ public abstract class WorkMapper {
 
     List<Long> mapAttachment(List<Attachment> list) {
         ArrayList<Long> arr = new ArrayList<>();
-        for (Attachment obj: list) {
-            arr.add(obj.getId());
-        }
+        if (list != null)
+            for (Attachment obj: list) {
+                arr.add(obj.getId());
+            }
         return arr;
     }
 
     List<Long> mapDoneWork(List<DoneWork> list) {
         ArrayList<Long> arr = new ArrayList<>();
-        for (DoneWork obj: list) {
-            arr.add(obj.getId());
-        }
+        if (list != null)
+            for (DoneWork obj: list) {
+                arr.add(obj.getId());
+            }
         return arr;
     }
 
     List<DoneWork> mapDoneWorkId(List<Long> idList) {
         ArrayList<DoneWork> arr = new ArrayList<>();
-        for (Long id: idList) {
-            arr.add(entityManager.getReference(DoneWork.class, id));
-        }
+        if (idList != null)
+            for (Long id: idList) {
+                arr.add(entityManager.getReference(DoneWork.class, id));
+            }
         return arr;
     }
 
     List<Attachment> mapAttachmentId(List<Long> idList) {
         ArrayList<Attachment> arr = new ArrayList<>();
-        for (Long id: idList) {
-            arr.add(entityManager.getReference(Attachment.class, id));
-        }
+        if (idList != null)
+            for (Long id: idList) {
+                arr.add(entityManager.getReference(Attachment.class, id));
+            }
         return arr;
     }
 

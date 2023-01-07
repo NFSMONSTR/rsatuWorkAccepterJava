@@ -1,6 +1,7 @@
 package ru.rsatu.rwa.resource;
 
 
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import ru.rsatu.rwa.pojo.dto.WorkDto;
 import ru.rsatu.rwa.service.WorksService;
 
@@ -21,6 +22,9 @@ public class WorkResource {
 
     @Context
     SecurityContext context;
+
+    @Inject
+    JsonWebToken jwt;
 
     /**
      * Получение всех работ
@@ -50,6 +54,9 @@ public class WorkResource {
     @Path("/work")
     @RolesAllowed({"ADMIN", "TEACHER"})
     public Response saveWork(WorkDto workDto) {
+        if (workDto.getAuthor() == null) {
+            workDto.setAuthor(Long.parseLong(jwt.getClaim("user_id").toString()));
+        }
         worksService.saveWork(workDto);
         return Response.status(Response.Status.CREATED).build();
     }
