@@ -28,7 +28,6 @@ public class DoneWork {
 
     @ManyToOne
     @JoinColumn(name = "work_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Work work;
     @ColumnDefault("-1")
     private Long mark;

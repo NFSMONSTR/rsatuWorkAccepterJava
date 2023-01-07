@@ -46,7 +46,7 @@ public class GroupResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/group")
     @RolesAllowed({"ADMIN"})
-    public Response saveUser(GroupDto groupDto) {
+    public Response saveGroup(GroupDto groupDto) {
         groupsService.saveGroup(groupDto);
         return Response.status(Response.Status.CREATED).build();
     }

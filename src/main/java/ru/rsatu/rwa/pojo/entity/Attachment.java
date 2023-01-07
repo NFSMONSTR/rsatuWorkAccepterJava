@@ -29,5 +29,9 @@ public class Attachment {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User author;
 
+    @ManyToOne
+    @JoinColumn(name = "work_id")
+    private User work;
+
 }
 

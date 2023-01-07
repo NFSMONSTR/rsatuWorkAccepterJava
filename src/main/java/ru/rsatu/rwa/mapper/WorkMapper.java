@@ -1,18 +1,17 @@
 package ru.rsatu.rwa.mapper;
 
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import ru.rsatu.rwa.pojo.dto.UserDto;
 import ru.rsatu.rwa.pojo.dto.WorkDto;
-import ru.rsatu.rwa.pojo.entity.Group;
+import ru.rsatu.rwa.pojo.entity.Attachment;
+import ru.rsatu.rwa.pojo.entity.DoneWork;
 import ru.rsatu.rwa.pojo.entity.User;
 import ru.rsatu.rwa.pojo.entity.Work;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-
+import java.util.ArrayList;
+import java.util.List;
 @Mapper(componentModel = "cdi")
 public abstract class WorkMapper {
 
@@ -38,10 +37,46 @@ public abstract class WorkMapper {
     @Mapping(target = "semestr", source = "semestr")
     public abstract Work toWork(WorkDto workDto);
 
-    @AfterMapping
-    public void afterWorkMapping(@MappingTarget Work result, WorkDto workDto) {
-        User author = entityManager.getReference(User.class, workDto.getAuthor());
-        result.setAuthor(author);
+//    @AfterMapping
+//    public void afterWorkMapping(@MappingTarget Work result, WorkDto workDto) {
+//        User author = entityManager.getReference(User.class, workDto.getAuthorId());
+//        result.setAuthor(author);
+//    }
+
+    List<Long> mapAttachment(List<Attachment> list) {
+        ArrayList<Long> arr = new ArrayList<>();
+        for (Attachment obj: list) {
+            arr.add(obj.getId());
+        }
+        return arr;
+    }
+
+    List<Long> mapDoneWork(List<DoneWork> list) {
+        ArrayList<Long> arr = new ArrayList<>();
+        for (DoneWork obj: list) {
+            arr.add(obj.getId());
+        }
+        return arr;
+    }
+
+    List<DoneWork> mapDoneWorkId(List<Long> idList) {
+        ArrayList<DoneWork> arr = new ArrayList<>();
+        for (Long id: idList) {
+            arr.add(entityManager.getReference(DoneWork.class, id));
+        }
+        return arr;
+    }
+
+    List<Attachment> mapAttachmentId(List<Long> idList) {
+        ArrayList<Attachment> arr = new ArrayList<>();
+        for (Long id: idList) {
+            arr.add(entityManager.getReference(Attachment.class, id));
+        }
+        return arr;
+    }
+
+    User map(Long id) {
+        return entityManager.getReference(User.class, id);
     }
 
 }

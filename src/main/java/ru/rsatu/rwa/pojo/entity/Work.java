@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Задание на лабораторную работу
@@ -31,6 +32,19 @@ public class Work {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User author;
     private Long semestr;
+
+    @OneToMany(
+            mappedBy = "work",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Attachment> attachments;
+    @OneToMany(
+            mappedBy = "work",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<DoneWork> done_works;
 
 }
 
