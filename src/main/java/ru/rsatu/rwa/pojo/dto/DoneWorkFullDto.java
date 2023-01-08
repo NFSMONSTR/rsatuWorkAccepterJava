@@ -9,10 +9,10 @@ import java.util.List;
 
 @Getter
 @Setter
-public class DoneWorkDto {
+public class DoneWorkFullDto {
     private Long id;
     private Long authorId;
-    private Long workId;
+    private WorkDto work;
     private String text;
     @JsonProperty
     private CommentWorkDto comment;

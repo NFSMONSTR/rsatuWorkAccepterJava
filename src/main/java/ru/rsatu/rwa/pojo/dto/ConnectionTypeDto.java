@@ -2,7 +2,7 @@ package ru.rsatu.rwa.pojo.dto;
 
 public enum ConnectionTypeDto {
     WORK("WORK"),
-    TRYWORK("TRYWORK"),
+    DONEWORK("DONEWORK"),
     COMMENTWORK("COMMENTWORK");
     private final String connType;
 

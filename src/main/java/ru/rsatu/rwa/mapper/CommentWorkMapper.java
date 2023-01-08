@@ -7,7 +7,7 @@ import org.mapstruct.MappingTarget;
 import ru.rsatu.rwa.pojo.dto.CommentWorkDto;
 import ru.rsatu.rwa.pojo.entity.Attachment;
 import ru.rsatu.rwa.pojo.entity.CommentWork;
-import ru.rsatu.rwa.pojo.entity.TryWork;
+import ru.rsatu.rwa.pojo.entity.DoneWork;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -24,7 +24,7 @@ public abstract class CommentWorkMapper {
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "text", source = "text")
-    @Mapping(target = "tworkId", source = "twork.id")
+    @Mapping(target = "dworkId", source = "dwork.id")
     public abstract CommentWorkDto toCommentWorkDto(CommentWork commentWork);
 
     @Mapping(target = "id", source = "id")
@@ -33,8 +33,8 @@ public abstract class CommentWorkMapper {
 
     @AfterMapping
     public void afterCommentWorkMapping(@MappingTarget CommentWork result, CommentWorkDto commentWorkDto) {
-        TryWork twork = entityManager.getReference(TryWork.class, commentWorkDto.getTworkId());
-        result.setTwork(twork);
+        DoneWork dwork = entityManager.getReference(DoneWork.class, commentWorkDto.getDworkId());
+        result.setDwork(dwork);
     }
 
     Set<Attachment> mapAttachmentId(List<Long> idList) {

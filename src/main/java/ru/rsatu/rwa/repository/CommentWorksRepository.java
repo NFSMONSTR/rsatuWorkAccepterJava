@@ -25,7 +25,7 @@ public class CommentWorksRepository {
     /**
      * Получить все
      */
-    public List<CommentWork> getCommentWorks(Long page, Long size) {
+    public List<CommentWork> getCommentWorks() {
         return entityManager.createQuery("select c from CommentWork c", CommentWork.class)
                 .getResultList();
     }

@@ -7,6 +7,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Сданная лабораторная работа
@@ -29,8 +31,17 @@ public class DoneWork {
     @ManyToOne
     @JoinColumn(name = "work_id")
     private Work work;
-    @ColumnDefault("-1")
-    private Long mark;
+    private String text;
+    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JoinTable(
+            name = "doneworks_attachments",
+            joinColumns = { @JoinColumn(name = "done_work_id") },
+            inverseJoinColumns = { @JoinColumn(name = "attachment_id") }
+    )
+    private Set<Attachment> attachments = new HashSet<>();
+
+    @OneToOne(mappedBy = "dwork")
+    private CommentWork comment;
 
 }
 

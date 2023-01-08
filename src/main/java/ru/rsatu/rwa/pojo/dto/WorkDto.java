@@ -1,5 +1,6 @@
 package ru.rsatu.rwa.pojo.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,8 @@ public class WorkDto {
     private Long markup;
     private Long author;
     private List<Long> attachments;
+    @JsonIgnore
     private List<Long> done_works;
+    @JsonIgnore
     private List<Long> groups;
 }

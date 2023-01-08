@@ -23,11 +23,12 @@ public class CommentWork {
     @SequenceGenerator(name = "comment_works_id_gen", sequenceName = "comment_works_id_gen_seq", initialValue = 1, allocationSize = 10)
     private Long id;
     private String text;
+    private String mark;
 
-    @ManyToOne
-    @JoinColumn(name = "try_work_id")
+    @OneToOne
+    @JoinColumn(name = "done_work_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private TryWork twork;
+    private DoneWork dwork;
 
     @ManyToMany(cascade = { CascadeType.MERGE })
     @JoinTable(

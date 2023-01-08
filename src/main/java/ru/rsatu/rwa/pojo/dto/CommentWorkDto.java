@@ -8,7 +8,8 @@ import java.util.List;
 @Setter
 public class CommentWorkDto {
     private Long id;
-    private Long tworkId;
+    private Long dworkId;
+    private MarkDto mark;
     private String text;
     private List<Long> attachments;
 }

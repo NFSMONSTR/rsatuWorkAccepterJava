@@ -5,7 +5,7 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import ru.rsatu.rwa.pojo.dto.*;
 import ru.rsatu.rwa.service.AttachmentsService;
 import ru.rsatu.rwa.service.CommentWorksService;
-import ru.rsatu.rwa.service.TryWorksService;
+import ru.rsatu.rwa.service.DoneWorksService;
 import ru.rsatu.rwa.service.WorksService;
 
 import javax.annotation.security.PermitAll;
@@ -28,7 +28,7 @@ public class AttachmentResource {
     @Inject
     WorksService worksService;
     @Inject
-    TryWorksService tryWorksService;
+    DoneWorksService doneWorksService;
     @Inject
     CommentWorksService commentWorksService;
     @Inject
@@ -104,17 +104,17 @@ public class AttachmentResource {
                 worksService.saveWork(work);
                 attachment.getWorks().add(work.getId());
             }
-            case TRYWORK -> {
-                TryWorkDto twork = tryWorksService.getTryWork(connectionDto.getConnectionId());
-                twork.getAttachments().add(attachment.getId());
-                tryWorksService.saveTryWork(twork);
-                attachment.getTryWorks().add(twork.getId());
-            }
             case COMMENTWORK -> {
                 CommentWorkDto cwork = commentWorksService.getCommentWork(connectionDto.getConnectionId());
                 cwork.getAttachments().add(attachment.getId());
                 commentWorksService.saveCommentWork(cwork);
                 attachment.getCommentWorks().add(cwork.getId());
+            }
+            case DONEWORK -> {
+                DoneWorkDto dwork = doneWorksService.getDoneWork_(connectionDto.getConnectionId());
+                dwork.getAttachments().add(attachment.getId());
+                doneWorksService.saveDoneWork(dwork);
+                attachment.getCommentWorks().add(dwork.getId());
             }
         }
         attachmentsService.saveAttachment(attachment);
@@ -135,17 +135,17 @@ public class AttachmentResource {
                 worksService.saveWork(work);
                 attachment.getWorks().remove(work.getId());
             }
-            case TRYWORK -> {
-                TryWorkDto twork = tryWorksService.getTryWork(connectionDto.getConnectionId());
-                twork.getAttachments().remove(attachment.getId());
-                tryWorksService.saveTryWork(twork);
-                attachment.getTryWorks().remove(twork.getId());
-            }
             case COMMENTWORK -> {
                 CommentWorkDto cwork = commentWorksService.getCommentWork(connectionDto.getConnectionId());
                 cwork.getAttachments().remove(attachment.getId());
                 commentWorksService.saveCommentWork(cwork);
                 attachment.getCommentWorks().remove(cwork.getId());
+            }
+            case DONEWORK -> {
+                DoneWorkDto dwork = doneWorksService.getDoneWork_(connectionDto.getConnectionId());
+                dwork.getAttachments().remove(attachment.getId());
+                doneWorksService.saveDoneWork(dwork);
+                attachment.getCommentWorks().remove(dwork.getId());
             }
         }
         attachmentsService.saveAttachment(attachment);

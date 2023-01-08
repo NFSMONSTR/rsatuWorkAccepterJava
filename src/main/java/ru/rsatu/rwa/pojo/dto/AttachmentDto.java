@@ -19,7 +19,7 @@ public class AttachmentDto {
     @JsonIgnore
     private List<Long> works;
     @JsonIgnore
-    private List<Long> tryWorks;
+    private List<Long> doneWorks;
     @JsonIgnore
     private List<Long> commentWorks;
 

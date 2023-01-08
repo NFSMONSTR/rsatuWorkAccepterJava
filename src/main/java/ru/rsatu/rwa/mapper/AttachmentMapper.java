@@ -53,20 +53,20 @@ public abstract class AttachmentMapper {
         return set;
     }
 
-    List<Long> mapTryWork(Set<TryWork> set) {
+    List<Long> mapDoneWork(Set<DoneWork> set) {
         ArrayList<Long> arr = new ArrayList<>();
         if (set != null)
-            for (TryWork obj: set) {
+            for (DoneWork obj: set) {
                 arr.add(obj.getId());
             }
         return arr;
     }
 
-    Set<TryWork> mapTryWorkId(List<Long> idList) {
-        HashSet<TryWork> set = new HashSet<>();
+    Set<DoneWork> mapDoneWorkId(List<Long> idList) {
+        HashSet<DoneWork> set = new HashSet<>();
         if (idList != null)
             for (Long id: idList) {
-                set.add(entityManager.getReference(TryWork.class, id));
+                set.add(entityManager.getReference(DoneWork.class, id));
             }
         return set;
     }

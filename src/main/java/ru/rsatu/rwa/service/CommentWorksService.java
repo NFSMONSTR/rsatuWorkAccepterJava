@@ -23,8 +23,8 @@ public class CommentWorksService {
     /**
      * Получить все
      */
-    public List<CommentWorkDto> getCommentWorks(Long page, Long size) {
-        return commentWorksRepository.getCommentWorks(page, size)
+    public List<CommentWorkDto> getCommentWorks() {
+        return commentWorksRepository.getCommentWorks()
                 .stream()
                 .map(commentWorkMapper::toCommentWorkDto)
                 .toList();

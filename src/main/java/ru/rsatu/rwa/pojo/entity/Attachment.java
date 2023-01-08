@@ -34,7 +34,7 @@ public class Attachment {
     @ManyToMany(mappedBy = "attachments", cascade = { CascadeType.MERGE })
     private Set<Work> works = new HashSet<>();
     @ManyToMany(mappedBy = "attachments", cascade = { CascadeType.MERGE })
-    private Set<TryWork> tryWorks = new HashSet<>();
+    private Set<DoneWork> doneWorks = new HashSet<>();
     @ManyToMany(mappedBy = "attachments", cascade = { CascadeType.MERGE })
     private Set<CommentWork> commentWorks = new HashSet<>();
     @PreRemove
@@ -42,7 +42,7 @@ public class Attachment {
         for (Work w : works) {
             w.getAttachments().remove(this);
         }
-        for (TryWork w : tryWorks) {
+        for (DoneWork w : doneWorks) {
             w.getAttachments().remove(this);
         }
         for (CommentWork w : commentWorks) {
