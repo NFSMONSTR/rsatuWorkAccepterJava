@@ -6,19 +6,21 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Группа(ПИМ-22)
+ *
  */
 @Getter
 @Setter
 @Entity
-@Table(name = "commentworks")
+@Table(name = "comment_works")
 public class CommentWork {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "commentworks_id_gen")
-    @SequenceGenerator(name = "commentworks_id_gen", sequenceName = "commentworks_id_gen_seq", initialValue = 1, allocationSize = 10)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_works_id_gen")
+    @SequenceGenerator(name = "comment_works_id_gen", sequenceName = "comment_works_id_gen_seq", initialValue = 1, allocationSize = 10)
     private Long id;
     private String text;
 
@@ -26,6 +28,14 @@ public class CommentWork {
     @JoinColumn(name = "try_work_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private TryWork twork;
+
+    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JoinTable(
+            name = "comment_works_attachments",
+            joinColumns = { @JoinColumn(name = "commentwork_id") },
+            inverseJoinColumns = { @JoinColumn(name = "attachment_id") }
+    )
+    private Set<Attachment> attachments = new HashSet<>();
 
 }
 

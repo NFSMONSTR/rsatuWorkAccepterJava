@@ -60,4 +60,7 @@ public class WorksService {
         return worksRepository.getWorkAuthorUsername(workId);
     }
 
+    public Long getCount(Long size) {
+        return worksRepository.getCount(size);
+    }
 }

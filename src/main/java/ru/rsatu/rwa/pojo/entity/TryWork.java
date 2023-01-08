@@ -2,11 +2,12 @@ package ru.rsatu.rwa.pojo.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Попытка сдачи лабораторной работы
@@ -14,7 +15,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "try_works")
+@Table(name = "tryworks")
 public class TryWork {
 
     @Id
@@ -28,6 +29,13 @@ public class TryWork {
     private DoneWork dwork;
     private Long version;
     private String text;
+    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JoinTable(
+            name = "tryworks_attachments",
+            joinColumns = { @JoinColumn(name = "trywork_id") },
+            inverseJoinColumns = { @JoinColumn(name = "attachment_id") }
+    )
+    private Set<Attachment> attachments = new HashSet<>();
 
 }
 

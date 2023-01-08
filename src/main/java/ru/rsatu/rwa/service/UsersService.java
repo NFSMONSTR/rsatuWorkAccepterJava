@@ -32,8 +32,8 @@ public class UsersService {
     /**
      * Получить всех авторов
      */
-    public List<UserDto> getUsers() {
-        return usersRepository.getUsers()
+    public List<UserDto> getUsers(Long page, Long size) {
+        return usersRepository.getUsers(page, size)
                 .stream()
                 .map(userMapper::toUserDto)
                 .toList();
@@ -55,5 +55,9 @@ public class UsersService {
 
     public UserDto getUser(Long userId) {
         return userMapper.toUserDto(usersRepository.getUser(userId));
+    }
+
+    public Long getCount(Long size) {
+        return usersRepository.getCount(size);
     }
 }

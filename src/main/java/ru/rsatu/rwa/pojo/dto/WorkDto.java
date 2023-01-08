@@ -15,7 +15,7 @@ public class WorkDto {
     private String subject;
     private Long markup;
     private Long author;
-    private Long semestr;
     private List<Long> attachments;
     private List<Long> done_works;
+    private List<Long> groups;
 }

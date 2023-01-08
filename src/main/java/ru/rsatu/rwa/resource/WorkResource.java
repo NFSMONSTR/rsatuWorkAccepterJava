@@ -2,6 +2,7 @@ package ru.rsatu.rwa.resource;
 
 
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import ru.rsatu.rwa.pojo.dto.PageDto;
 import ru.rsatu.rwa.pojo.dto.WorkDto;
 import ru.rsatu.rwa.service.WorksService;
 
@@ -32,8 +33,8 @@ public class WorkResource {
     @GET
     @Path("/work")
     @PermitAll
-    public List<WorkDto> getWorks(@DefaultValue("1") @QueryParam("page") Long page, @DefaultValue("10") @QueryParam("size") Long size) {
-        return worksService.getWorks(page, size);
+    public PageDto<List<WorkDto>> getWorks(@DefaultValue("1") @QueryParam("page") Long page, @DefaultValue("10") @QueryParam("size") Long size) {
+        return new PageDto<>(page,size,worksService.getCount(size),worksService.getWorks(page, size));
     }
 
     /**

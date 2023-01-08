@@ -2,6 +2,7 @@ package ru.rsatu.rwa.resource;
 
 
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import ru.rsatu.rwa.pojo.dto.PageDto;
 import ru.rsatu.rwa.pojo.dto.UserDto;
 import ru.rsatu.rwa.service.UsersService;
 
@@ -26,9 +27,9 @@ public class UserResource {
     //todo remove
     @GET
     @Path("/user")
-    @PermitAll
-    public List<UserDto> getUsers() {
-        return usersService.getUsers();
+    @RolesAllowed({"ADMIN", "TEACHER"})
+    public PageDto<List<UserDto>> getUsers(@DefaultValue("1") @QueryParam("page") Long page, @DefaultValue("10") @QueryParam("size") Long size) {
+        return new PageDto<>(page,size,usersService.getCount(size),usersService.getUsers(page, size));
     }
 
     /**
@@ -44,7 +45,6 @@ public class UserResource {
     /**
      * Создание пользователя
      */
-    //todo permission check
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -57,7 +57,6 @@ public class UserResource {
     /**
      * Удаление пользователя
      */
-    //todo permission check
     @DELETE
     @Path("/user/{user_id}")
     @RolesAllowed({"ADMIN"})

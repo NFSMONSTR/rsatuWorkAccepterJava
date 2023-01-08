@@ -10,7 +10,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Репозиторий для работы с пользователями
@@ -35,8 +34,9 @@ public class UsersRepository {
     /**
      * Получить всех пользователей
      */
-    public List<User> getUsers() {
-        return entityManager.createQuery("select u from User u", User.class)
+    public List<User> getUsers(Long page, Long size) {
+        long firstResult = (page-1)*size;
+        return entityManager.createQuery("select u from User u", User.class).setFirstResult((int) firstResult).setMaxResults(Math.toIntExact(size))
                 .getResultList();
     }
 
@@ -69,5 +69,11 @@ public class UsersRepository {
 
     public User getUser(Long userId) {
         return entityManager.find(User.class, userId);
+    }
+
+    public Long getCount(Long size) {
+        Long count = entityManager.createQuery("select count(*) from User u", Long.class)
+                .getSingleResult();
+        return Math.round(Math.ceil((double) count/size));
     }
 }

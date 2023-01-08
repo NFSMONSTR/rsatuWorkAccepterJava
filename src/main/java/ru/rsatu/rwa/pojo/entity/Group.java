@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Группа(по направлению)
@@ -19,6 +21,13 @@ public class Group {
     @SequenceGenerator(name = "groups_id_gen", sequenceName = "groups_id_gen_seq", initialValue = 1, allocationSize = 10)
     private Long id;
     private String name;
+    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JoinTable(
+            name = "group_works",
+            joinColumns = { @JoinColumn(name = "group_id") },
+            inverseJoinColumns = { @JoinColumn(name = "work_id") }
+    )
+    private Set<Work> works = new HashSet<>();
 
 }
 

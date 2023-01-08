@@ -26,7 +26,8 @@ public class WorksRepository {
      * Получить все работы
      */
     public List<Work> getWorks(Long page, Long size) {
-        return entityManager.createQuery("select w from Work w", Work.class)
+        long firstResult = (page-1)*size;
+        return entityManager.createQuery("select w from Work w", Work.class).setFirstResult((int) firstResult).setMaxResults(Math.toIntExact(size))
                 .getResultList();
     }
 
@@ -64,5 +65,11 @@ public class WorksRepository {
     public String getWorkAuthorUsername(Long workId) {
         Work work = entityManager.find(Work.class, workId);
         return work.getAuthor().getUsername();
+    }
+
+    public Long getCount(Long size) {
+        Long count = entityManager.createQuery("select count(*) from Work w", Long.class)
+                .getSingleResult();
+        return Math.round(Math.ceil((double) count/size));
     }
 }

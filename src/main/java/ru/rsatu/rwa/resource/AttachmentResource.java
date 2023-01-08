@@ -2,8 +2,11 @@ package ru.rsatu.rwa.resource;
 
 
 import org.eclipse.microprofile.jwt.JsonWebToken;
-import ru.rsatu.rwa.pojo.dto.AttachmentDto;
+import ru.rsatu.rwa.pojo.dto.*;
 import ru.rsatu.rwa.service.AttachmentsService;
+import ru.rsatu.rwa.service.CommentWorksService;
+import ru.rsatu.rwa.service.TryWorksService;
+import ru.rsatu.rwa.service.WorksService;
 
 import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
@@ -22,6 +25,12 @@ import java.util.List;
 public class AttachmentResource {
     @Inject
     AttachmentsService attachmentsService;
+    @Inject
+    WorksService worksService;
+    @Inject
+    TryWorksService tryWorksService;
+    @Inject
+    CommentWorksService commentWorksService;
     @Inject
     JsonWebToken jwt;
     @Context
@@ -79,6 +88,68 @@ public class AttachmentResource {
         } else {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/attachment/connection")
+    @PermitAll
+    public Response connectAttachment(AttachmentConnectionDto connectionDto) {
+        //todo permission check
+        AttachmentDto attachment = attachmentsService.getAttachment(connectionDto.getAttachmentId());
+        switch (connectionDto.getConnectionType()) {
+            case WORK -> {
+                WorkDto work = worksService.getWork(connectionDto.getConnectionId());
+                work.getAttachments().add(attachment.getId());
+                worksService.saveWork(work);
+                attachment.getWorks().add(work.getId());
+            }
+            case TRYWORK -> {
+                TryWorkDto twork = tryWorksService.getTryWork(connectionDto.getConnectionId());
+                twork.getAttachments().add(attachment.getId());
+                tryWorksService.saveTryWork(twork);
+                attachment.getTryWorks().add(twork.getId());
+            }
+            case COMMENTWORK -> {
+                CommentWorkDto cwork = commentWorksService.getCommentWork(connectionDto.getConnectionId());
+                cwork.getAttachments().add(attachment.getId());
+                commentWorksService.saveCommentWork(cwork);
+                attachment.getCommentWorks().add(cwork.getId());
+            }
+        }
+        attachmentsService.saveAttachment(attachment);
+        return Response.status(Response.Status.CREATED).build();
+    }
+
+    @DELETE
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/attachment/connection")
+    @PermitAll
+    public Response disconnectAttachment(AttachmentConnectionDto connectionDto) {
+        //todo permission check
+        AttachmentDto attachment = attachmentsService.getAttachment(connectionDto.getAttachmentId());
+        switch (connectionDto.getConnectionType()) {
+            case WORK -> {
+                WorkDto work = worksService.getWork(connectionDto.getConnectionId());
+                work.getAttachments().remove(attachment.getId());
+                worksService.saveWork(work);
+                attachment.getWorks().remove(work.getId());
+            }
+            case TRYWORK -> {
+                TryWorkDto twork = tryWorksService.getTryWork(connectionDto.getConnectionId());
+                twork.getAttachments().remove(attachment.getId());
+                tryWorksService.saveTryWork(twork);
+                attachment.getTryWorks().remove(twork.getId());
+            }
+            case COMMENTWORK -> {
+                CommentWorkDto cwork = commentWorksService.getCommentWork(connectionDto.getConnectionId());
+                cwork.getAttachments().remove(attachment.getId());
+                commentWorksService.saveCommentWork(cwork);
+                attachment.getCommentWorks().remove(cwork.getId());
+            }
+        }
+        attachmentsService.saveAttachment(attachment);
+        return Response.status(Response.Status.CREATED).build();
     }
 
 }

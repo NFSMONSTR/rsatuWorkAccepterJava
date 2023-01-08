@@ -6,6 +6,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Группа(ПИМ-22)
@@ -29,9 +31,24 @@ public class Attachment {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User author;
 
-    @ManyToOne
-    @JoinColumn(name = "work_id")
-    private User work;
+    @ManyToMany(mappedBy = "attachments", cascade = { CascadeType.MERGE })
+    private Set<Work> works = new HashSet<>();
+    @ManyToMany(mappedBy = "attachments", cascade = { CascadeType.MERGE })
+    private Set<TryWork> tryWorks = new HashSet<>();
+    @ManyToMany(mappedBy = "attachments", cascade = { CascadeType.MERGE })
+    private Set<CommentWork> commentWorks = new HashSet<>();
+    @PreRemove
+    private void removeAttachmentConnections() {
+        for (Work w : works) {
+            w.getAttachments().remove(this);
+        }
+        for (TryWork w : tryWorks) {
+            w.getAttachments().remove(this);
+        }
+        for (CommentWork w : commentWorks) {
+            w.getAttachments().remove(this);
+        }
+    }
 
 }
 

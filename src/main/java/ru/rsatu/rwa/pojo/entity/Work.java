@@ -6,7 +6,9 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Задание на лабораторную работу
@@ -33,18 +35,21 @@ public class Work {
     private User author;
     private Long semestr;
 
-    @OneToMany(
-            mappedBy = "work",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JoinTable(
+            name = "works_attachments",
+            joinColumns = { @JoinColumn(name = "work_id") },
+            inverseJoinColumns = { @JoinColumn(name = "attachment_id") }
     )
-    private List<Attachment> attachments;
+    private Set<Attachment> attachments = new HashSet<>();
     @OneToMany(
             mappedBy = "work",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     private List<DoneWork> done_works;
+    @ManyToMany(mappedBy = "works", cascade = { CascadeType.MERGE })
+    private Set<Group> groups = new HashSet<>();
 
 }
 

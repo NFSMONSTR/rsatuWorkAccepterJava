@@ -3,15 +3,15 @@ package ru.rsatu.rwa.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.rsatu.rwa.pojo.dto.WorkDto;
-import ru.rsatu.rwa.pojo.entity.Attachment;
-import ru.rsatu.rwa.pojo.entity.DoneWork;
-import ru.rsatu.rwa.pojo.entity.User;
-import ru.rsatu.rwa.pojo.entity.Work;
+import ru.rsatu.rwa.pojo.entity.*;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 @Mapper(componentModel = "cdi")
 public abstract class WorkMapper {
 
@@ -25,7 +25,6 @@ public abstract class WorkMapper {
     @Mapping(target = "subject", source = "subject")
     @Mapping(target = "markup", source = "markup")
     @Mapping(target = "author", source = "author.id")
-    @Mapping(target = "semestr", source = "semestr")
     public abstract WorkDto toWorkDto(Work work);
 
     @Mapping(target = "id", source = "id")
@@ -34,16 +33,9 @@ public abstract class WorkMapper {
     @Mapping(target = "description", source = "description")
     @Mapping(target = "subject", source = "subject")
     @Mapping(target = "markup", source = "markup")
-    @Mapping(target = "semestr", source = "semestr")
     public abstract Work toWork(WorkDto workDto);
 
-//    @AfterMapping
-//    public void afterWorkMapping(@MappingTarget Work result, WorkDto workDto) {
-//        User author = entityManager.getReference(User.class, workDto.getAuthorId());
-//        result.setAuthor(author);
-//    }
-
-    List<Long> mapAttachment(List<Attachment> list) {
+    List<Long> mapAttachment(Set<Attachment> list) {
         ArrayList<Long> arr = new ArrayList<>();
         if (list != null)
             for (Attachment obj: list) {
@@ -70,8 +62,8 @@ public abstract class WorkMapper {
         return arr;
     }
 
-    List<Attachment> mapAttachmentId(List<Long> idList) {
-        ArrayList<Attachment> arr = new ArrayList<>();
+    Set<Attachment> mapAttachmentId(List<Long> idList) {
+        HashSet<Attachment> arr = new HashSet<>();
         if (idList != null)
             for (Long id: idList) {
                 arr.add(entityManager.getReference(Attachment.class, id));
@@ -81,6 +73,24 @@ public abstract class WorkMapper {
 
     User map(Long id) {
         return entityManager.getReference(User.class, id);
+    }
+
+    List<Long> mapGroup(Set<Group> set) {
+        ArrayList<Long> arr = new ArrayList<>();
+        if (set != null)
+            for (Group obj: set) {
+                arr.add(obj.getId());
+            }
+        return arr;
+    }
+
+    Set<Group> mapGroupId(List<Long> idList) {
+        HashSet<Group> set = new HashSet<>();
+        if (idList != null)
+            for (Long id: idList) {
+                set.add(entityManager.getReference(Group.class, id));
+            }
+        return set;
     }
 
 }
