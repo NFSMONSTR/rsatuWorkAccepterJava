@@ -3,6 +3,7 @@ package ru.rsatu.rwa.repository;
 import org.apache.commons.codec.digest.DigestUtils;
 import ru.rsatu.rwa.mapper.UserMapper;
 import ru.rsatu.rwa.pojo.dto.UserDto;
+import ru.rsatu.rwa.pojo.entity.Group;
 import ru.rsatu.rwa.pojo.entity.User;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -75,5 +76,13 @@ public class UsersRepository {
         Long count = entityManager.createQuery("select count(*) from User u", Long.class)
                 .getSingleResult();
         return Math.round(Math.ceil((double) count/size));
+    }
+
+    @Transactional
+    public void addToGroup(Long userId, Long groupId) {
+        User u = entityManager.find(User.class,userId);
+        Group g = entityManager.find(Group.class,groupId);
+        u.setGroup(g);
+        entityManager.flush();
     }
 }

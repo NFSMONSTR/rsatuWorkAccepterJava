@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
+import java.util.Map;
 
 @Path("/api/v1/")
 public class WorkResource {
@@ -34,7 +35,15 @@ public class WorkResource {
     @Path("/work")
     @PermitAll
     public PageDto<List<WorkDto>> getWorks(@DefaultValue("1") @QueryParam("page") Long page, @DefaultValue("10") @QueryParam("size") Long size) {
-        return new PageDto<>(page,size,worksService.getCount(size),worksService.getWorks(page, size));
+        if (context.isUserInRole("ADMIN")) {
+            return new PageDto<>(page, size, worksService.getCount(size), worksService.getWorks(page, size));
+        } else if (context.isUserInRole("TEACHER")) {
+            Map.Entry<Long,List<WorkDto>> works = worksService.getWorksTeacher(page,size,Long.parseLong(jwt.getClaim("user_id").toString()));
+            return new PageDto<>(page, size, works.getKey(), works.getValue());
+        } else {
+            Map.Entry<Long,List<WorkDto>> works = worksService.getWorksUser(page,size,Long.parseLong(jwt.getClaim("user_id").toString()));
+            return new PageDto<>(page, size, works.getKey(), works.getValue());
+        }
     }
 
     /**
@@ -60,6 +69,18 @@ public class WorkResource {
         }
         worksService.saveWork(workDto);
         return Response.status(Response.Status.CREATED).build();
+    }
+
+    @POST
+    @Path("/work/{work_id}/share/{group_id}")
+    @RolesAllowed({"ADMIN", "TEACHER"})
+    public Response connectWork(@PathParam("work_id") Long work_id, @PathParam("group_id") Long groupId) {
+        Long userId = Long.parseLong(jwt.getClaim("user_id").toString());
+        if (worksService.connectWork(userId, work_id, groupId)) {
+            return Response.status(Response.Status.CREATED).build();
+        } else {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
     }
 
     /**

@@ -2,11 +2,13 @@ package ru.rsatu.rwa.service;
 
 import ru.rsatu.rwa.mapper.WorkMapper;
 import ru.rsatu.rwa.pojo.dto.WorkDto;
+import ru.rsatu.rwa.pojo.entity.Work;
 import ru.rsatu.rwa.repository.WorksRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Сервис для работы с лаб работами
@@ -28,6 +30,16 @@ public class WorksService {
                 .stream()
                 .map(workMapper::toWorkDto)
                 .toList();
+    }
+
+    public Map.Entry<Long,List<WorkDto>> getWorksTeacher(Long page, Long size, Long userId) {
+        Map.Entry<Long,List<Work>> works = worksRepository.getWorksTeacher(userId, page, size);
+        return Map.entry(works.getKey(),works.getValue().stream().map(workMapper::toWorkDto).toList());
+    }
+
+    public Map.Entry<Long,List<WorkDto>> getWorksUser(Long page, Long size, Long userId) {
+        Map.Entry<Long,List<Work>> works = worksRepository.getWorksUser(userId, page, size);
+        return Map.entry(works.getKey(),works.getValue().stream().map(workMapper::toWorkDto).toList());
     }
 
     /**
@@ -62,5 +74,9 @@ public class WorksService {
 
     public Long getCount(Long size) {
         return worksRepository.getCount(size);
+    }
+
+    public boolean connectWork(Long userId, Long workId, Long groupId) {
+        return worksRepository.connectWork(userId, workId, groupId);
     }
 }

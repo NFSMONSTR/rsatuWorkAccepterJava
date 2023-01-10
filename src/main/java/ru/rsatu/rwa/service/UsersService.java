@@ -60,4 +60,8 @@ public class UsersService {
     public Long getCount(Long size) {
         return usersRepository.getCount(size);
     }
+
+    public void addToGroup(Long userId, Long groupId) {
+        usersRepository.addToGroup(userId,groupId);
+    }
 }

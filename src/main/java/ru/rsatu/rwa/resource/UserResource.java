@@ -11,6 +11,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/api/v1/")
@@ -52,6 +53,14 @@ public class UserResource {
     @RolesAllowed({"ADMIN"})
     public UserDto saveUser(UserDto userDto) {
         return usersService.saveUser(userDto);
+    }
+
+    @POST
+    @Path("/user/{user_id}/group/{group_id}")
+    @RolesAllowed({"ADMIN"})
+    public Response addUserToGroup(@PathParam("user_id") Long userId, @PathParam("group_id") Long groupId) {
+        usersService.addToGroup(userId,groupId);
+        return Response.status(Response.Status.CREATED).build();
     }
 
     /**
