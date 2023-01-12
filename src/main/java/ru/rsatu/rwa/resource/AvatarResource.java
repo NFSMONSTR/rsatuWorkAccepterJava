@@ -6,7 +6,6 @@ import ru.rsatu.rwa.pojo.dto.AvatarDto;
 import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.DatatypeConverter;
 import java.io.*;
@@ -29,5 +28,15 @@ public class AvatarResource {
             throw new RuntimeException(e);
         }
         return Response.status(Response.Status.CREATED).build();
+    }
+
+    @DELETE
+    @PermitAll
+    @Path("/avatar")
+    public Response deleteAvatar() {
+        String fname = "static/avatar/"+jwt.getClaim("user_id").toString()+ ".png";
+        File file = new File(fname);
+        file.delete();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 }
