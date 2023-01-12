@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -25,10 +26,54 @@ public class DoneWorksRepository {
     /**
      * Получить все работы
      */
-    public List<DoneWork> getDoneWorks(Long page, Long size) {
+    public Map.Entry<Long,List<DoneWork>> getDoneWorks(Long page, Long size, Boolean rated) {
+        String sql = "from DoneWork d";
+        if (rated!=null) {
+            if (rated) {
+                sql = sql.concat(" where d.comment is NOT NULL");
+            } else {
+                sql = sql.concat(" where d.comment is NULL");
+            }
+        }
         long firstResult = (page-1)*size;
-        return entityManager.createQuery("select d from DoneWork d", DoneWork.class).setFirstResult((int) firstResult).setMaxResults(Math.toIntExact(size))
+        List<DoneWork> doneWorks = entityManager.createQuery("select d ".concat(sql), DoneWork.class).setFirstResult((int) firstResult).setMaxResults(Math.toIntExact(size))
                 .getResultList();
+        Long count = entityManager.createQuery("select count(*) ".concat(sql),Long.class).getSingleResult();
+        return Map.entry(Math.round(Math.ceil((double) count/size)), doneWorks);
+    }
+
+    public Map.Entry<Long,List<DoneWork>> getDoneWorksByUser(Long userId, Long page, Long size, Boolean rated) {
+        long firstResult = (page-1)*size;
+        String sql = "from DoneWork d where d.author.id = :userId";
+        if (rated!=null) {
+            if (rated) {
+                sql = sql.concat(" and d.comment is not null");
+            } else {
+                sql = sql.concat(" and d.comment is null");
+            }
+        }
+        List<DoneWork> doneWorks = entityManager.createQuery("select d ".concat(sql), DoneWork.class).setParameter("userId", userId).setFirstResult((int) firstResult).setMaxResults(Math.toIntExact(size))
+                .getResultList();
+        Long count = entityManager.createQuery("select count(*) ".concat(sql), Long.class).setParameter("userId", userId)
+                .getSingleResult();
+        return Map.entry(Math.round(Math.ceil((double) count/size)), doneWorks);
+    }
+
+    public Map.Entry<Long,List<DoneWork>> getDoneWorksByTeacher(Long userId, Long page, Long size, Boolean rated) {
+        long firstResult = (page-1)*size;
+        String sql = "from DoneWork d where d.work.author.id = :userId";
+        if (rated!=null) {
+            if (rated) {
+                sql = sql.concat(" and d.comment is not null");
+            } else {
+                sql = sql.concat(" and d.comment is null");
+            }
+        }
+        List<DoneWork> doneWorks = entityManager.createQuery("select d ".concat(sql), DoneWork.class).setParameter("userId", userId).setFirstResult((int) firstResult).setMaxResults(Math.toIntExact(size))
+                .getResultList();
+        Long count = entityManager.createQuery("select count(*) ".concat(sql), Long.class).setParameter("userId", userId)
+                .getSingleResult();
+        return Map.entry(Math.round(Math.ceil((double) count/size)), doneWorks);
     }
 
     /**
@@ -60,16 +105,5 @@ public class DoneWorksRepository {
     public void deleteDoneWork(Long doneWorkId) {
         DoneWork doneWork = entityManager.find(DoneWork.class, doneWorkId);
         entityManager.remove(doneWork);
-    }
-
-    public String getDoneWorkAuthorUsername(Long doneWorkId) {
-        DoneWork doneWork = entityManager.find(DoneWork.class, doneWorkId);
-        return doneWork.getAuthor().getUsername();
-    }
-
-    public Long getCount(Long size) {
-        Long count = entityManager.createQuery("select count(*) from DoneWork w", Long.class)
-                .getSingleResult();
-        return Math.round(Math.ceil((double) count/size));
     }
 }

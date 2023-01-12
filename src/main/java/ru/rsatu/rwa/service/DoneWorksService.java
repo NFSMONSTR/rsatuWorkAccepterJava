@@ -4,11 +4,13 @@ import ru.rsatu.rwa.mapper.DoneWorkFullMapper;
 import ru.rsatu.rwa.mapper.DoneWorkMapper;
 import ru.rsatu.rwa.pojo.dto.DoneWorkDto;
 import ru.rsatu.rwa.pojo.dto.DoneWorkFullDto;
+import ru.rsatu.rwa.pojo.entity.DoneWork;
 import ru.rsatu.rwa.repository.DoneWorksRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -28,11 +30,20 @@ public class DoneWorksService {
     /**
      * Получить все
      */
-    public List<DoneWorkFullDto> getDoneWorks(Long page, Long size) {
-        return doneWorksRepository.getDoneWorks(page, size)
-                .stream()
-                .map(doneWorkFullMapper::toDoneWorkFullDto)
-                .toList();
+    public Map.Entry<Long,List<DoneWorkFullDto>> getDoneWorks(Long page, Long size, Boolean rated) {
+        Map.Entry<Long, List<DoneWork>> doneWorks = doneWorksRepository.getDoneWorks(page, size, rated);
+        return Map.entry(doneWorks.getKey(),doneWorks.getValue().stream().map(doneWorkFullMapper::toDoneWorkFullDto).toList());
+
+    }
+
+    public Map.Entry<Long,List<DoneWorkFullDto>> getDoneWorksByUser(Long userId, Long page, Long size, Boolean rated) {
+        Map.Entry<Long, List<DoneWork>> doneWorks = doneWorksRepository.getDoneWorksByUser(userId, page, size, rated);
+        return Map.entry(doneWorks.getKey(),doneWorks.getValue().stream().map(doneWorkFullMapper::toDoneWorkFullDto).toList());
+    }
+
+    public Map.Entry<Long,List<DoneWorkFullDto>> getDoneWorksByTeacher(Long userId, Long page, Long size, Boolean rated) {
+        Map.Entry<Long, List<DoneWork>> doneWorks = doneWorksRepository.getDoneWorksByTeacher(userId, page, size, rated);
+        return Map.entry(doneWorks.getKey(),doneWorks.getValue().stream().map(doneWorkFullMapper::toDoneWorkFullDto).toList());
     }
 
     /**
@@ -59,9 +70,5 @@ public class DoneWorksService {
      */
     public void deleteDoneWork(Long doneWorkId) {
         doneWorksRepository.deleteDoneWork(doneWorkId);
-    }
-
-    public Long getCount(Long size) {
-        return doneWorksRepository.getCount(size);
     }
 }

@@ -8,14 +8,13 @@ import ru.rsatu.rwa.pojo.dto.PageDto;
 import ru.rsatu.rwa.service.DoneWorksService;
 
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
+import java.util.Map;
 
 @Path("/api/v1/")
 public class DoneWorkResource {
@@ -34,8 +33,19 @@ public class DoneWorkResource {
     @GET
     @Path("/donework")
     @PermitAll
-    public PageDto<List<DoneWorkFullDto>> getDoneWorks(@DefaultValue("1") @QueryParam("page") Long page, @DefaultValue("10") @QueryParam("size") Long size) {
-        return new PageDto<>(page,size,doneWorksService.getCount(size),doneWorksService.getDoneWorks(page, size));
+    public PageDto<List<DoneWorkFullDto>> getDoneWorks(@DefaultValue("1") @QueryParam("page") Long page, @DefaultValue("10") @QueryParam("size") Long size, @QueryParam("rated") Boolean rated) {
+        if (context.isUserInRole("ADMIN")) {
+            Map.Entry<Long, List<DoneWorkFullDto>> doneWorks = doneWorksService.getDoneWorks(page, size, rated);
+            return new PageDto<>(page, size, doneWorks.getKey(), doneWorks.getValue());
+        } else if (context.isUserInRole("TEACHER")) {
+            Long userId = Long.parseLong(jwt.getClaim("user_id").toString());
+            Map.Entry<Long, List<DoneWorkFullDto>> doneWorks = doneWorksService.getDoneWorksByTeacher(userId,page,size,rated);
+            return new PageDto<>(page, size, doneWorks.getKey(), doneWorks.getValue());
+        } else {
+            Long userId = Long.parseLong(jwt.getClaim("user_id").toString());
+            Map.Entry<Long, List<DoneWorkFullDto>> doneWorks = doneWorksService.getDoneWorksByUser(userId,page,size,rated);
+            return new PageDto<>(page, size, doneWorks.getKey(), doneWorks.getValue());
+        }
     }
 
     /**

@@ -2,7 +2,6 @@ package ru.rsatu.rwa.pojo.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -40,7 +39,7 @@ public class DoneWork {
     )
     private Set<Attachment> attachments = new HashSet<>();
 
-    @OneToOne(mappedBy = "dwork")
+    @OneToOne
     private CommentWork comment;
 
 }

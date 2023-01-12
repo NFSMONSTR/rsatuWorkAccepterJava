@@ -25,6 +25,7 @@ public abstract class DoneWorkFullMapper {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "authorId", source = "author.id")
     @Mapping(target = "text", source = "text")
+    @Mapping(target = "commentId", source = "comment.id")
     public abstract DoneWorkFullDto toDoneWorkFullDto(DoneWork doneWork);
 
     Set<Attachment> mapAttachmentId(List<Long> idList) {

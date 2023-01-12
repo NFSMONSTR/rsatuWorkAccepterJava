@@ -3,6 +3,7 @@ package ru.rsatu.rwa.repository;
 import ru.rsatu.rwa.mapper.CommentWorkMapper;
 import ru.rsatu.rwa.pojo.dto.CommentWorkDto;
 import ru.rsatu.rwa.pojo.entity.CommentWork;
+import ru.rsatu.rwa.pojo.entity.DoneWork;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -47,6 +48,11 @@ public class CommentWorksRepository {
             entityManager.merge(commentWork);
         } else {
             entityManager.persist(commentWork);
+        }
+        if (commentWork.getDwork() != null) {
+            DoneWork d = commentWork.getDwork();
+            d.setComment(commentWork);
+            entityManager.merge(d);
         }
         entityManager.flush();
         return commentWork;

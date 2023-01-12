@@ -63,12 +63,11 @@ public class WorkResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/work")
     @RolesAllowed({"ADMIN", "TEACHER"})
-    public Response saveWork(WorkDto workDto) {
+    public WorkDto saveWork(WorkDto workDto) {
         if (workDto.getAuthor() == null) {
             workDto.setAuthor(Long.parseLong(jwt.getClaim("user_id").toString()));
         }
-        worksService.saveWork(workDto);
-        return Response.status(Response.Status.CREATED).build();
+        return worksService.saveWork(workDto);
     }
 
     @POST

@@ -1,6 +1,6 @@
 package ru.rsatu.rwa.pojo.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,4 +21,9 @@ public class WorkDto {
     private List<Long> done_works;
     @JsonIgnore
     private List<Long> groups;
+
+    @JsonProperty
+    List<Long> getGroups() {
+      return this.groups;
+    }
 }

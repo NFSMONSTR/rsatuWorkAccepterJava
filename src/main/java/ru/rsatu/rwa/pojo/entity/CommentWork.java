@@ -2,8 +2,6 @@ package ru.rsatu.rwa.pojo.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -26,8 +24,6 @@ public class CommentWork {
     private String mark;
 
     @OneToOne
-    @JoinColumn(name = "done_work_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private DoneWork dwork;
 
     @ManyToMany(cascade = { CascadeType.MERGE })

@@ -2,8 +2,6 @@ package ru.rsatu.rwa.resource;
 
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import ru.rsatu.rwa.pojo.dto.CommentWorkDto;
-import ru.rsatu.rwa.pojo.dto.DoneWorkDto;
-import ru.rsatu.rwa.pojo.dto.PageDto;
 import ru.rsatu.rwa.service.CommentWorksService;
 
 import javax.annotation.security.PermitAll;
@@ -12,7 +10,6 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 
@@ -53,10 +50,9 @@ public class CommentWorkResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/comment")
-    @PermitAll
-    public Response saveComment(CommentWorkDto commentWorkDto) {
+    @RolesAllowed({"ADMIN", "TEACHER"})
+    public CommentWorkDto saveComment(CommentWorkDto commentWorkDto) {
         //todo check permissions
-        commentWorksService.saveCommentWork(commentWorkDto);
-        return Response.status(Response.Status.CREATED).build();
+        return commentWorksService.saveCommentWork(commentWorkDto);
     }
 }
