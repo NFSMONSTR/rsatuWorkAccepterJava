@@ -79,4 +79,8 @@ public class WorksService {
     public boolean connectWork(Long userId, Long workId, Long groupId) {
         return worksRepository.connectWork(userId, workId, groupId);
     }
+
+    public boolean disconnectWork(Long userId, Long workId, Long groupId) {
+        return worksRepository.disconnectWork(userId, workId, groupId);
+    }
 }

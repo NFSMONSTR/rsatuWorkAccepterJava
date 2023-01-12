@@ -48,7 +48,12 @@ public class Work {
             orphanRemoval = true
     )
     private List<DoneWork> done_works;
-    @ManyToMany(mappedBy = "works", cascade = { CascadeType.MERGE })
+    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JoinTable(
+            name = "group_works",
+            inverseJoinColumns = { @JoinColumn(name = "group_id") },
+            joinColumns = { @JoinColumn(name = "work_id") }
+    )
     private Set<Group> groups = new HashSet<>();
 
 }

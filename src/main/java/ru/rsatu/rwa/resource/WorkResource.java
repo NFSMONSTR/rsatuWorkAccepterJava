@@ -82,6 +82,18 @@ public class WorkResource {
         }
     }
 
+    @DELETE
+    @Path("/work/{work_id}/share/{group_id}")
+    @RolesAllowed({"ADMIN", "TEACHER"})
+    public Response disconnectWork(@PathParam("work_id") Long work_id, @PathParam("group_id") Long groupId) {
+        Long userId = Long.parseLong(jwt.getClaim("user_id").toString());
+        if (worksService.disconnectWork(userId, work_id, groupId)) {
+            return Response.status(Response.Status.NO_CONTENT).build();
+        } else {
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+    }
+
     /**
      * Удаление работы
      */

@@ -73,7 +73,16 @@ public class WorksRepository {
     public Work saveWork(WorkDto workDto) {
         Work work = workMapper.toWork(workDto);
         if (work.getId() != null) {
-            entityManager.merge(work);
+             if (workDto.getAttachments() != null) {
+                 entityManager.merge(work);
+             } else {
+                 Work old = entityManager.find(Work.class, work.getId());
+                 old.setName(work.getName());
+                 old.setShort_description(work.getShort_description());
+                 old.setDescription(work.getDescription());
+                 old.setSubject(work.getSubject());
+                 old.setMarkup(work.getMarkup());
+             }
         } else {
             entityManager.persist(work);
         }
@@ -111,6 +120,18 @@ public class WorksRepository {
         Group g = entityManager.find(Group.class, groupId);
         g.getWorks().add(work);
         work.getGroups().add(g);
+        return true;
+    }
+    @Transactional
+    public boolean disconnectWork(Long userId, Long workId, Long groupId) {
+        User u = entityManager.find(User.class, userId);
+        Work work = entityManager.find(Work.class, workId);
+        if (!Objects.equals(work.getAuthor().getId(), userId) && !u.getRole().equals("ADMIN")) {
+            return false;
+        }
+        Group g = entityManager.find(Group.class, groupId);
+        g.getWorks().remove(work);
+        work.getGroups().remove(g);
         return true;
     }
 }

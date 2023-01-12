@@ -39,7 +39,7 @@ public class DoneWork {
     )
     private Set<Attachment> attachments = new HashSet<>();
 
-    @OneToOne
+    @OneToOne(cascade = { CascadeType.ALL })
     private CommentWork comment;
 
 }
