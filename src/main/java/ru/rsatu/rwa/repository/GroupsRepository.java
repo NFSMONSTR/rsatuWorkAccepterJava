@@ -30,6 +30,12 @@ public class GroupsRepository {
                 .getResultList();
     }
 
+    public List<Group> getGroupsByName(String name) {
+        return entityManager.createQuery("select g from Group g where lower(g.name) like :name", Group.class)
+                .setParameter("name", '%'+name.toLowerCase()+'%')
+                .getResultList();
+    }
+
     /**
      * Получить группу по id
      */

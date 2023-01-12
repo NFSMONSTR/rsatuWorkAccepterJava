@@ -2,6 +2,7 @@ package ru.rsatu.rwa.service;
 
 import ru.rsatu.rwa.mapper.GroupMapper;
 import ru.rsatu.rwa.pojo.dto.GroupDto;
+import ru.rsatu.rwa.pojo.entity.Group;
 import ru.rsatu.rwa.repository.GroupsRepository;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -23,8 +24,14 @@ public class GroupsService {
     /**
      * Получить все группы
      */
-    public List<GroupDto> getGroups() {
-        return groupsRepository.getGroups()
+    public List<GroupDto> getGroups(String name) {
+        List<Group> groups;
+        if (name != null) {
+            groups = groupsRepository.getGroupsByName(name);
+        } else {
+            groups = groupsRepository.getGroups();
+        }
+        return groups
                 .stream()
                 .map(groupMapper::toGroupDto)
                 .toList();

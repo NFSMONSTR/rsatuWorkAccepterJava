@@ -24,8 +24,8 @@ public class GroupResource {
     @GET
     @Path("/group")
     @PermitAll
-    public List<GroupDto> getGroups() {
-        return groupsService.getGroups();
+    public List<GroupDto> getGroups(@QueryParam("name") String name) {
+        return groupsService.getGroups(name);
     }
 
     /**
