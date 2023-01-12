@@ -42,7 +42,7 @@ public class AttachmentResource {
     @Path("/attachment")
     @PermitAll
     public List<AttachmentDto> getAttachments() {
-        return attachmentsService.getAttachments();
+        return attachmentsService.getAttachments(Long.valueOf(jwt.getClaim("user_id").toString()));
     }
 
     @GET
@@ -80,7 +80,7 @@ public class AttachmentResource {
     @PermitAll
     public Response deleteAttachment(@PathParam("attachment_id") Long attachmentId) {
         AttachmentDto attachment = attachmentsService.getAttachment(attachmentId);
-        if (context.isUserInRole("ADMIN") || Long.valueOf(jwt.getClaim("user_Id").toString()).equals(attachment.getAuthor())) {
+        if (context.isUserInRole("ADMIN") || Long.valueOf(jwt.getClaim("user_id").toString()).equals(attachment.getAuthor())) {
             File file = new File("static/"+attachment.getName());
             file.delete();
             attachmentsService.deleteAttachment(attachmentId);

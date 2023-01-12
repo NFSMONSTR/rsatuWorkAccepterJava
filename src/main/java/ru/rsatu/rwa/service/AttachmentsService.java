@@ -23,8 +23,8 @@ public class AttachmentsService {
     /**
      * Получить все прикрепленные документы
      */
-    public List<AttachmentDto> getAttachments() {
-        return attachmentsRepository.getAttachments()
+    public List<AttachmentDto> getAttachments(Long userId) {
+        return attachmentsRepository.getAttachments(userId)
                 .stream()
                 .map(attachmentMapper::toAttachmentDto)
                 .toList();

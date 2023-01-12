@@ -25,8 +25,9 @@ public class AttachmentsRepository {
     /**
      * Получить все прикрепленные документы
      */
-    public List<Attachment> getAttachments() {
-        return entityManager.createQuery("select a from Attachment a", Attachment.class)
+    public List<Attachment> getAttachments(Long userId) {
+        return entityManager.createQuery("select a from Attachment a where a.author.id = :userId", Attachment.class)
+                .setParameter("userId",userId)
                 .getResultList();
     }
 
