@@ -25,6 +25,7 @@ public class Work {
     private Long id;
     private String name;
     private String short_description;
+    @Column(name="description", columnDefinition="TEXT")
     private String description;
     private String subject;
     private Long markup;
@@ -33,7 +34,6 @@ public class Work {
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User author;
-    private Long semestr;
 
     @ManyToMany(cascade = { CascadeType.MERGE })
     @JoinTable(

@@ -20,6 +20,7 @@ public class CommentWork {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_works_id_gen")
     @SequenceGenerator(name = "comment_works_id_gen", sequenceName = "comment_works_id_gen_seq", initialValue = 1, allocationSize = 10)
     private Long id;
+    @Column(name="text", columnDefinition="TEXT")
     private String text;
     private String mark;
 

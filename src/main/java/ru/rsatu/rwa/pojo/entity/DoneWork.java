@@ -30,6 +30,7 @@ public class DoneWork {
     @ManyToOne
     @JoinColumn(name = "work_id")
     private Work work;
+    @Column(name="text", columnDefinition="TEXT")
     private String text;
     @ManyToMany(cascade = { CascadeType.MERGE })
     @JoinTable(
